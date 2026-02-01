@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Manage Skills (Firebase)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .header-left p i {
+            color: #4ade80;
+            margin-right: 5px;
+        }
+
+        .firebase-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #4ade80;
+        }
+
+        .firebase-status.offline {
+            background: rgba(251, 146, 60, 0.1);
+            border-color: rgba(251, 146, 60, 0.3);
+            color: #fb923c;
+        }
+
+        .firebase-status i {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(148, 163, 184, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Grid */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        /* Add Skill Form */
+        .add-skill-section {
+            animation: slideRight 0.6s ease 0.1s both;
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            padding: 35px 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #e0e7ff;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #e0e7ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #60a5fa;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #64748b;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: #1e293b;
+            color: #e0e7ff;
+        }
+
+        .icon-preview {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 12px;
+            text-align: center;
+            color: #60a5fa;
+            font-size: 2rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(96, 165, 250, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Skills List Section */
+        .skills-list-section {
+            animation: slideLeft 0.6s ease 0.2s both;
+        }
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            border-color: transparent;
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        .skills-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .skills-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .skills-container::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 10px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb {
+            background: rgba(96, 165, 250, 0.3);
+            border-radius: 10px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(96, 165, 250, 0.5);
+        }
+
+        .skill-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skill-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(96, 165, 250, 0.4);
+            transform: translateX(5px);
+        }
+
+        .skill-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #60a5fa;
+        }
+
+        .skill-name {
+            font-size: 1rem;
+            color: #e0e7ff;
+            font-weight: 500;
+        }
+
+        .btn-delete {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #fca5a5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px;
+            color: #60a5fa;
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 18px 25px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.4s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.show {
+            display: flex;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard {
+                padding: 20px 15px;
+            }
+
+            .dashboard-header {
+                padding: 25px 20px;
+            }
+
+            .section-card {
+                padding: 25px 20px;
+            }
+
+            .category-tabs {
+                gap: 8px;
+            }
+
+            .tab-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+                <p><i class="fas fa-check-circle"></i> Logged in as: <strong id="adminName">Karthik Alle</strong></p>
+                <div class="firebase-status" id="firebaseStatus">
+                    <i class="fas fa-circle"></i>
+                    <span id="statusText">Connecting...</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-secondary" onclick="goToPortfolio()">
+                    <i class="fas fa-home"></i> Portfolio
+                </button>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Add Skill Form -->
+            <div class="add-skill-section">
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Skill
+                    </h2>
+
+                    <form id="addSkillForm" onsubmit="handleAddSkill(event)">
+                        <div class="form-group">
+                            <label class="form-label">Category *</label>
+                            <select class="form-select" id="skillCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="frontend">Frontend Development</option>
+                                <option value="backend">Backend Development</option>
+                                <option value="mobile">Mobile App Development</option>
+                                <option value="mlai">ML/AI</option>
+                                <option value="tools">Tools & Others</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Skill Name *</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="skillName"
+                                placeholder="e.g., React.js, Python, TensorFlow"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Icon Class (Font Awesome)</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="skillIcon"
+                                placeholder="e.g., fab fa-react, fas fa-code"
+                                value="fas fa-circle"
+                                oninput="updateIconPreview()"
+                            >
+                            <div class="icon-preview" id="iconPreview">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-plus"></i> Add Skill
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Skills List -->
+            <div class="skills-list-section">
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-list"></i>
+                        Manage Skills
+                    </h2>
+
+                    <!-- Category Tabs -->
+                    <div class="category-tabs">
+                        <button class="tab-btn active" onclick="switchCategory('frontend')">
+                            Frontend (<span id="frontendCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('backend')">
+                            Backend (<span id="backendCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('mobile')">
+                            Mobile (<span id="mobileCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('mlai')">
+                            ML/AI (<span id="mlaiCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('tools')">
+                            Tools (<span id="toolsCount">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Skills Container -->
+                    <div class="skills-container" id="skillsContainer">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading skills...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Success!</span>
+    </div>
+
+    
+    
+
+    <!-- Firebase SDK (MUST be first) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- Your Firebase Config (MUST be second) -->
+<script src="firebase-config.js"></script>
+
+<!-- Skills Data (MUST be third) -->
+<script src="skillss-data-firebase.js"></script>
+    <script>
+        let currentCategory = 'frontend';
+
+        // Check Authentication
+        function checkAuth() {
+            const isAdmin = sessionStorage.getItem('isAdmin');
+            const loginTime = sessionStorage.getItem('loginTime');
+            
+            if (isAdmin !== 'true' || !loginTime) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Check session expiry (1 hour)
+            const timeDiff = Date.now() - parseInt(loginTime);
+            const hourInMs = 60 * 60 * 1000;
+            
+            if (timeDiff >= hourInMs) {
+                logout();
+            }
+            
+            // Set admin name
+            const username = sessionStorage.getItem('adminUsername') || 'Admin';
+            document.getElementById('adminName').textContent = username === 'kalle' ? 'Karthik Alle' : username;
+        }
+
+        // Update Firebase Status
+        function updateFirebaseStatus(online) {
+            const statusElement = document.getElementById('firebaseStatus');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                statusElement.classList.remove('offline');
+                statusText.textContent = 'Firebase Connected';
+            } else {
+                statusElement.classList.add('offline');
+                statusText.textContent = 'Offline Mode';
+            }
+        }
+
+        // Show Notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const icon = notification.querySelector('i');
+            
+            notification.className = `notification ${type} show`;
+            notificationText.textContent = message;
+            
+            // Change icon based on type
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 
+                           type === 'error' ? 'fas fa-exclamation-circle' : 
+                           'fas fa-info-circle';
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update Icon Preview
+        function updateIconPreview() {
+            const iconClass = document.getElementById('skillIcon').value.trim() || 'fas fa-circle';
+            document.getElementById('iconPreview').innerHTML = `<i class="${iconClass}"></i>`;
+        }
+
+        // Handle Add Skill
+        async function handleAddSkill(event) {
+            event.preventDefault();
+            
+            const category = document.getElementById('skillCategory').value;
+            const name = document.getElementById('skillName').value.trim();
+            const icon = document.getElementById('skillIcon').value.trim() || 'fas fa-circle';
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!category || !name) {
+                showNotification('Please fill all required fields', 'error');
+                return;
+            }
+            
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+            
+            const success = await addSkill(category, name, icon);
+            
+            if (success) {
+                showNotification(`✅ "${name}" added successfully!`, 'success');
+                
+                // Reset form
+                document.getElementById('addSkillForm').reset();
+                updateIconPreview();
+                
+                // Reload skills
+                await loadAllSkills();
+            } else {
+                showNotification(`⚠️ "${name}" already exists in this category`, 'warning');
+            }
+            
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Skill';
+        }
+
+        // Switch Category Tab
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load skills for this category
+            loadCategorySkills(category);
+        }
+
+        // Load Skills for Category
+        async function loadCategorySkills(category) {
+            const skills = await getSkills();
+            const container = document.getElementById('skillsContainer');
+            const categorySkills = skills[category] || [];
+            
+            if (categorySkills.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No skills in this category yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = categorySkills.map(skill => `
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <div class="skill-icon">
+                            <i class="${skill.icon}"></i>
+                        </div>
+                        <span class="skill-name">${skill.name}</span>
+                    </div>
+                    <button class="btn-delete" onclick="handleDeleteSkill('${category}', '${skill.name.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Handle Delete Skill
+        async function handleDeleteSkill(category, skillName) {
+            if (confirm(`Are you sure you want to delete "${skillName}"?`)) {
+                const success = await deleteSkill(category, skillName);
+                
+                if (success) {
+                    showNotification(`🗑️ "${skillName}" deleted successfully`, 'success');
+                    await loadAllSkills();
+                } else {
+                    showNotification('Failed to delete skill', 'error');
+                }
+            }
+        }
+
+        // Load All Skills and Update Counts
+        async function loadAllSkills() {
+            const skills = await getSkills();
+            
+            // Update counts
+            document.getElementById('frontendCount').textContent = skills.frontend.length;
+            document.getElementById('backendCount').textContent = skills.backend.length;
+            document.getElementById('mobileCount').textContent = skills.mobile.length;
+           document.getElementById('mlaiCount').textContent = skills.mlai.length;
+            document.getElementById('toolsCount').textContent = skills.tools.length;
+            
+            // Reload current category
+            await loadCategorySkills(currentCategory);
+        }
+
+        // Go to Portfolio
+        function goToPortfolio() {
+            window.location.href = 'skills-section-firebase.html';
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'admin-login.html';
+        }
+
+        // Initialize Dashboard
+        window.addEventListener('load', async () => {
+            checkAuth();
+            
+            // Check Firebase status
+            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                updateFirebaseStatus(true);
+                
+            } else {
+                updateFirebaseStatus(false);
+            }
+            
+            await loadAllSkills();
+            console.log('🎛️ Admin Dashboard Loaded');
+        });
+    </script>
+</body>
+</html>

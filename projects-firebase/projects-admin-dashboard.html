@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Admin Dashboard - Manage Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            padding: 30px 40px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .header-left p i {
+            color: #4ade80;
+            margin-right: 5px;
+        }
+
+        .firebase-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #4ade80;
+        }
+
+        .firebase-status.offline {
+            background: rgba(251, 146, 60, 0.1);
+            border-color: rgba(251, 146, 60, 0.3);
+            color: #fb923c;
+        }
+
+        .firebase-status i {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(148, 163, 184, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Grid */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        /* Add Project Form */
+        .add-project-section {
+            animation: slideRight 0.6s ease 0.1s both;
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            padding: 35px 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #e0e7ff;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #e0e7ff;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: #6366f1;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #64748b;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .form-select option {
+            background: #1e293b;
+            color: #e0e7ff;
+        }
+
+        /* Highlights Input */
+        .highlights-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .highlight-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .highlight-input-group input {
+            flex: 1;
+        }
+
+        .btn-remove-highlight {
+            padding: 10px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #fca5a5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-remove-highlight:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-add-highlight {
+            padding: 10px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            color: #a78bfa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .btn-add-highlight:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        /* Technologies Input */
+        .tech-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+        }
+
+        .tech-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 15px;
+            color: #a78bfa;
+            font-size: 0.85rem;
+        }
+
+        .tech-tag button {
+            background: none;
+            border: none;
+            color: #fca5a5;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 4px;
+            font-size: 0.9rem;
+        }
+
+        .tech-input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #6366f1;
+        }
+
+        .checkbox-group label {
+            color: #cbd5e1;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Projects List Section */
+        .projects-list-section {
+            animation: slideLeft 0.6s ease 0.2s both;
+        }
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: transparent;
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .projects-container {
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .projects-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .projects-container::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 10px;
+        }
+
+        .projects-container::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+        }
+
+        .projects-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
+        }
+
+        .project-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateX(5px);
+        }
+
+        .project-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .project-item-title {
+            font-size: 1.1rem;
+            color: #e0e7ff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .featured-star {
+            color: #fbbf24;
+            font-size: 0.9rem;
+        }
+
+        .project-item-duration {
+            font-size: 0.85rem;
+            color: #8b5cf6;
+            margin-top: 4px;
+        }
+
+        .project-item-description {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .project-item-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tech-badge-small {
+            padding: 4px 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            font-size: 0.75rem;
+            color: #a78bfa;
+        }
+
+        .project-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            flex: 1;
+            padding: 8px 16px;
+            border: 1px solid;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-edit {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #a78bfa;
+        }
+
+        .btn-edit:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px;
+            color: #6366f1;
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 18px 25px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.4s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.show {
+            display: flex;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard {
+                padding: 20px 15px;
+            }
+
+            .dashboard-header {
+                padding: 25px 20px;
+            }
+
+            .section-card {
+                padding: 25px 20px;
+            }
+
+            .category-tabs {
+                gap: 8px;
+            }
+
+            .tab-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h1><i class="fas fa-rocket"></i> Projects Dashboard</h1>
+                <p><i class="fas fa-check-circle"></i> Logged in as: <strong id="adminName">Karthik Alle</strong></p>
+                <div class="firebase-status" id="firebaseStatus">
+                    <i class="fas fa-circle"></i>
+                    <span id="statusText">Connecting...</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-secondary" onclick="goToPortfolio()">
+                    <i class="fas fa-home"></i> Portfolio
+                </button>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Add Project Form -->
+            <div class="add-project-section">
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Project
+                    </h2>
+
+                    <form id="addProjectForm" onsubmit="handleAddProject(event)">
+                        <div class="form-group">
+                            <label class="form-label required">Category</label>
+                            <select class="form-select" id="projectCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="web">Web Development</option>
+                                <option value="mobile">Mobile Apps</option>
+                                <option value="ml">ML/AI</option>
+                                <option value="automation">Automation</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">Project Title</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="projectTitle"
+                                placeholder="e.g., E-Commerce Website"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">Duration</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="projectDuration"
+                                placeholder="e.g., Jan 2026 - Feb 2026"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">Description</label>
+                            <textarea 
+                                class="form-textarea" 
+                                id="projectDescription"
+                                placeholder="Brief description of the project..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Key Highlights</label>
+                            <div class="highlights-container" id="highlightsContainer">
+                                <div class="highlight-input-group">
+                                    <input type="text" class="form-input highlight-input" placeholder="e.g., Built with React and Firebase">
+                                </div>
+                            </div>
+                            <button type="button" class="btn-add-highlight" onclick="addHighlightInput()">
+                                <i class="fas fa-plus"></i>
+                                Add Highlight
+                            </button>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">Technologies</label>
+                            <div class="tech-tags-container" id="techTagsContainer">
+                                <!-- Tech tags will appear here -->
+                            </div>
+                            <div class="tech-input-group">
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="techInput"
+                                    placeholder="e.g., React, Node.js, MongoDB"
+                                >
+                                <button type="button" class="btn-add-highlight" onclick="addTechnology()">
+                                    <i class="fas fa-plus"></i>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">GitHub Link</label>
+                            <input 
+                                type="url" 
+                                class="form-input" 
+                                id="projectGithub"
+                                placeholder="https://github.com/username/repo"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Live Demo Link</label>
+                            <input 
+                                type="url" 
+                                class="form-input" 
+                                id="projectLink"
+                                placeholder="https://your-demo.com"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Company/Institution</label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                id="projectCompany"
+                                placeholder="e.g., Google, MIT"
+                            >
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="projectFeatured">
+                            <label for="projectFeatured">Mark as Featured Project</label>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-plus"></i> Add Project
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Projects List -->
+            <div class="projects-list-section">
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-list"></i>
+                        Manage Projects
+                    </h2>
+
+                    <!-- Category Tabs -->
+                    <div class="category-tabs">
+                        <button class="tab-btn active" onclick="switchCategory('web')">
+                            Web (<span id="webCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('mobile')">
+                            Mobile (<span id="mobileCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('ml')">
+                            ML/AI (<span id="mlCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="switchCategory('automation')">
+                            Automation (<span id="automationCount">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Projects Container -->
+                    <div class="projects-container" id="projectsContainer">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading projects...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Success!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Projects Data Management -->
+    <script src="projects-data-firebase.js"></script>
+    
+    <script>
+        let currentCategory = 'web';
+        let technologies = [];
+
+        // Check Authentication
+        function checkAuth() {
+            const isAdmin = sessionStorage.getItem('isAdmin');
+            const loginTime = sessionStorage.getItem('loginTime');
+            
+            if (isAdmin !== 'true' || !loginTime) {
+                window.location.href = 'projects-admin-login.html';
+                return;
+            }
+            
+            // Check session expiry (1 hour)
+            const timeDiff = Date.now() - parseInt(loginTime);
+            const hourInMs = 60 * 60 * 1000;
+            
+            if (timeDiff >= hourInMs) {
+                logout();
+            }
+            
+            // Set admin name
+            const username = sessionStorage.getItem('adminUsername') || 'Admin';
+            document.getElementById('adminName').textContent = username === 'kalle' ? 'Karthik Alle' : username;
+        }
+
+        // Update Firebase Status
+        function updateFirebaseStatus(online) {
+            const statusElement = document.getElementById('firebaseStatus');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                statusElement.classList.remove('offline');
+                statusText.textContent = 'Firebase Connected';
+            } else {
+                statusElement.classList.add('offline');
+                statusText.textContent = 'Offline Mode';
+            }
+        }
+
+        // Show Notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const icon = notification.querySelector('i');
+            
+            notification.className = `notification ${type} show`;
+            notificationText.textContent = message;
+            
+            // Change icon based on type
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 
+                           type === 'error' ? 'fas fa-exclamation-circle' : 
+                           'fas fa-info-circle';
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add Highlight Input
+        function addHighlightInput() {
+            const container = document.getElementById('highlightsContainer');
+            const group = document.createElement('div');
+            group.className = 'highlight-input-group';
+            group.innerHTML = `
+                <input type="text" class="form-input highlight-input" placeholder="Add another highlight">
+                <button type="button" class="btn-remove-highlight" onclick="removeHighlightInput(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(group);
+        }
+
+        // Remove Highlight Input
+        function removeHighlightInput(button) {
+            button.parentElement.remove();
+        }
+
+        // Add Technology
+        function addTechnology() {
+            const input = document.getElementById('techInput');
+            const tech = input.value.trim();
+            
+            if (!tech) {
+                showNotification('Please enter a technology', 'warning');
+                return;
+            }
+            
+            if (technologies.includes(tech)) {
+                showNotification('Technology already added', 'warning');
+                return;
+            }
+            
+            technologies.push(tech);
+            input.value = '';
+            renderTechnologies();
+        }
+
+        // Remove Technology
+        function removeTechnology(tech) {
+            technologies = technologies.filter(t => t !== tech);
+            renderTechnologies();
+        }
+
+        // Render Technologies
+        function renderTechnologies() {
+            const container = document.getElementById('techTagsContainer');
+            
+            if (technologies.length === 0) {
+                container.innerHTML = '<span style="color: #64748b; font-size: 0.9rem;">No technologies added yet</span>';
+                return;
+            }
+            
+            container.innerHTML = technologies.map(tech => `
+                <div class="tech-tag">
+                    ${tech}
+                    <button type="button" onclick="removeTechnology('${tech}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Handle Add Project
+        async function handleAddProject(event) {
+            event.preventDefault();
+            
+            const category = document.getElementById('projectCategory').value;
+            const title = document.getElementById('projectTitle').value.trim();
+            const duration = document.getElementById('projectDuration').value.trim();
+            const description = document.getElementById('projectDescription').value.trim();
+            const github = document.getElementById('projectGithub').value.trim();
+            const link = document.getElementById('projectLink').value.trim();
+            const company = document.getElementById('projectCompany').value.trim();
+            const featured = document.getElementById('projectFeatured').checked;
+            
+            // Get highlights
+            const highlightInputs = document.querySelectorAll('.highlight-input');
+            const highlights = Array.from(highlightInputs)
+                .map(input => input.value.trim())
+                .filter(h => h !== '');
+            
+            // Validate
+            if (!category || !title || !duration || !description) {
+                showNotification('Please fill all required fields', 'error');
+                return;
+            }
+            
+            if (technologies.length === 0) {
+                showNotification('Please add at least one technology', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+            
+            // Create project object
+            const projectData = {
+                title,
+                duration,
+                description,
+                highlights,
+                technologies: [...technologies],
+                category,
+                featured
+            };
+            
+            if (github) projectData.github = github;
+            if (link) projectData.link = link;
+            if (company) {
+                // Determine if it's a company or institution based on common keywords
+                if (company.toLowerCase().includes('university') || 
+                    company.toLowerCase().includes('college') || 
+                    company.toLowerCase().includes('institute')) {
+                    projectData.institution = company;
+                } else {
+                    projectData.company = company;
+                }
+            }
+            
+            const success = await addProject(category, projectData);
+            
+            if (success) {
+                showNotification(`✅ "${title}" added successfully!`, 'success');
+                
+                // Reset form
+                document.getElementById('addProjectForm').reset();
+                technologies = [];
+                renderTechnologies();
+                
+                // Reset highlights
+                document.getElementById('highlightsContainer').innerHTML = `
+                    <div class="highlight-input-group">
+                        <input type="text" class="form-input highlight-input" placeholder="e.g., Built with React and Firebase">
+                    </div>
+                `;
+                
+                // Reload projects
+                await loadAllProjects();
+            } else {
+                showNotification('Failed to add project', 'error');
+            }
+            
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Project';
+        }
+
+        // Switch Category Tab
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load projects for this category
+            loadCategoryProjects(category);
+        }
+
+        // Load Projects for Category
+        async function loadCategoryProjects(category) {
+            const projects = await getProjects();
+            const container = document.getElementById('projectsContainer');
+            const categoryProjects = projects[category] || [];
+            
+            if (categoryProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No projects in this category yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = categoryProjects.map(project => `
+                <div class="project-item">
+                    <div class="project-item-header">
+                        <div>
+                            <div class="project-item-title">
+                                ${project.title}
+                                ${project.featured ? '<i class="fas fa-star featured-star"></i>' : ''}
+                            </div>
+                            <div class="project-item-duration">${project.duration}</div>
+                        </div>
+                    </div>
+                    <div class="project-item-description">${project.description}</div>
+                    <div class="project-item-tech">
+                        ${project.technologies.slice(0, 5).map(tech => `
+                            <span class="tech-badge-small">${tech}</span>
+                        `).join('')}
+                        ${project.technologies.length > 5 ? `<span class="tech-badge-small">+${project.technologies.length - 5} more</span>` : ''}
+                    </div>
+                    <div class="project-item-actions">
+                        <button class="btn-delete" onclick="handleDeleteProject('${category}', '${project.title.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle Delete Project
+        async function handleDeleteProject(category, projectTitle) {
+            if (confirm(`Are you sure you want to delete "${projectTitle}"?`)) {
+                const success = await deleteProject(category, projectTitle);
+                
+                if (success) {
+                    showNotification(`🗑️ "${projectTitle}" deleted successfully`, 'success');
+                    await loadAllProjects();
+                } else {
+                    showNotification('Failed to delete project', 'error');
+                }
+            }
+        }
+
+        // Load All Projects and Update Counts
+        async function loadAllProjects() {
+            const projects = await getProjects();
+            
+            // Update counts
+            document.getElementById('webCount').textContent = projects.web?.length || 0;
+            document.getElementById('mobileCount').textContent = projects.mobile?.length || 0;
+            document.getElementById('mlCount').textContent = projects.ml?.length || 0;
+            document.getElementById('automationCount').textContent = projects.automation?.length || 0;
+            
+            // Reload current category
+            await loadCategoryProjects(currentCategory);
+        }
+
+        // Go to Portfolio
+        function goToPortfolio() {
+            window.location.href = 'projects-section-firebase.html';
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'projects-admin-login.html';
+        }
+
+        // Initialize Dashboard
+        window.addEventListener('load', async () => {
+            checkAuth();
+            
+            // Check Firebase status
+            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                updateFirebaseStatus(true);
+            } else {
+                updateFirebaseStatus(false);
+            }
+            
+            // Initialize technologies display
+            renderTechnologies();
+            
+            await loadAllProjects();
+            console.log('🎛️ Projects Dashboard Loaded');
+        });
+
+        // Allow Enter key to add technology
+        document.addEventListener('DOMContentLoaded', () => {
+            const techInput = document.getElementById('techInput');
+            if (techInput) {
+                techInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTechnology();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

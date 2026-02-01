@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Karthik Alle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Subtle Animated Background */
+        .contact-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Subtle Floating Particles */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00fff9;
+            border-radius: 50%;
+            box-shadow: 0 0 3px #00fff9;
+            animation: floatParticle 15s infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        /* Subtle Glowing Orbs */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.08;
+            animation: floatOrb 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: #00fff9;
+            top: 10%;
+            left: -5%;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: #6366f1;
+            bottom: 10%;
+            right: -5%;
+            animation-delay: -12s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: #8b5cf6;
+            top: 50%;
+            left: 50%;
+            animation-delay: -7s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -30px); }
+            66% { transform: translate(-30px, 30px); }
+        }
+
+        /* Contact Section - Compact */
+        .contact-section {
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px 30px;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Refined Title */
+        .neon-title {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title-main {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00d9ff;
+            text-shadow: 
+                0 0 5px rgba(0, 217, 255, 0.3),
+                0 0 10px rgba(0, 217, 255, 0.2);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .title-sub {
+            font-size: 1.3rem;
+            font-weight: 400;
+            background: linear-gradient(90deg, #6366f1, #00d9ff, #8b5cf6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 4s linear infinite;
+            letter-spacing: 1.5px;
+            opacity: 0.9;
+        }
+
+        @keyframes gradient {
+            to { background-position: 200% center; }
+        }
+
+        /* Compact Contact Container */
+        .contact-container {
+            background: rgba(15, 20, 35, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px 35px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(100, 100, 100, 0.15);
+        }
+
+        .contact-container::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.3), rgba(139, 92, 246, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Compact Grid Layout */
+        .contact-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            background: rgba(20, 25, 40, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(80, 80, 80, 0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .contact-item:nth-child(1) { animation-delay: 0.1s; }
+        .contact-item:nth-child(2) { animation-delay: 0.15s; }
+        .contact-item:nth-child(3) { animation-delay: 0.2s; }
+        .contact-item:nth-child(4) { animation-delay: 0.25s; }
+        .contact-item:nth-child(5) { 
+            animation-delay: 0.3s;
+            grid-column: 1 / -1;
+        }
+
+        .contact-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--glow-color);
+            box-shadow: 0 0 8px var(--glow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-item:hover::before {
+            opacity: 0.6;
+        }
+
+        .contact-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 217, 255, 0.15);
+            border-color: rgba(var(--glow-rgb), 0.3);
+            background: rgba(25, 30, 45, 0.6);
+        }
+
+        /* Subtle Color Glows */
+        .contact-item.gmail {
+            --glow-color: #ea4335;
+            --glow-rgb: 234, 67, 53;
+        }
+
+        .contact-item.whatsapp {
+            --glow-color: #25d366;
+            --glow-rgb: 37, 211, 102;
+        }
+
+        .contact-item.linkedin {
+            --glow-color: #0077b5;
+            --glow-rgb: 0, 119, 181;
+        }
+
+        .contact-item.github {
+            --glow-color: #6e5494;
+            --glow-rgb: 110, 84, 148;
+        }
+
+        .contact-item.location {
+            --glow-color: #fbbf24;
+            --glow-rgb: 251, 191, 36;
+        }
+
+        /* Compact Contact Icon */
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.3s ease;
+            background: rgba(var(--glow-rgb), 0.08);
+        }
+
+        .contact-icon i {
+            position: relative;
+            z-index: 1;
+            color: var(--glow-color);
+            transition: transform 0.3s ease;
+            opacity: 0.9;
+        }
+
+        .contact-item:hover .contact-icon i {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        /* Compact Contact Info */
+        .contact-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e0e7ff;
+            margin-bottom: 3px;
+            opacity: 0.95;
+        }
+
+        .contact-detail {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.4;
+            opacity: 0.85;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contact-detail a {
+            color: #00d9ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-detail a:hover {
+            color: #6366f1;
+            text-shadow: 0 0 5px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Compact Action Button */
+        .contact-action {
+            padding: 8px 18px;
+            border: 1.5px solid rgba(var(--glow-rgb), 0.4);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--glow-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.9;
+        }
+
+        .contact-action::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--glow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-action:hover::before {
+            opacity: 0.15;
+        }
+
+        .contact-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(var(--glow-rgb), 0.3);
+            opacity: 1;
+            border-color: rgba(var(--glow-rgb), 0.6);
+        }
+
+        .contact-action i {
+            position: relative;
+            z-index: 1;
+            font-size: 0.8rem;
+        }
+
+        .contact-action span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Compact Footer Message */
+        .contact-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 100, 100, 0.15);
+            animation: fadeIn 0.8s ease 0.4s both;
+        }
+
+        .footer-message {
+            font-size: 0.95rem;
+            color: #00d9ff;
+            text-shadow: 0 0 5px rgba(0, 217, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0.8;
+        }
+
+        .footer-message i {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Subtle Notification */
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            padding: 15px 25px;
+            background: rgba(37, 211, 102, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(37, 211, 102, 0.5);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification i {
+            font-size: 1.1rem;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .contact-section {
+                max-width: 900px;
+                padding: 20px 25px;
+            }
+
+            .title-main {
+                font-size: 2.2rem;
+            }
+
+            .title-sub {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .contact-section {
+                padding: 30px 20px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .neon-title {
+                margin-bottom: 25px;
+            }
+
+            .title-main {
+                font-size: 2rem;
+            }
+
+            .title-sub {
+                font-size: 1.1rem;
+            }
+
+            .contact-container {
+                padding: 25px 20px;
+            }
+
+            .contact-items {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .contact-item:nth-child(5) {
+                grid-column: 1;
+            }
+
+            .contact-item {
+                padding: 16px 18px;
+            }
+
+            .contact-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .contact-name {
+                font-size: 0.95rem;
+            }
+
+            .contact-detail {
+                font-size: 0.8rem;
+                white-space: normal;
+            }
+
+            .notification {
+                right: 15px;
+                left: 15px;
+                top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title-main {
+                font-size: 1.7rem;
+                letter-spacing: 1px;
+            }
+
+            .title-sub {
+                font-size: 1rem;
+            }
+
+            .contact-container {
+                padding: 20px 15px;
+            }
+
+            .contact-item {
+                padding: 14px 15px;
+                gap: 12px;
+            }
+
+            .contact-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+            }
+
+            .contact-name {
+                font-size: 0.9rem;
+            }
+
+            .contact-detail {
+                font-size: 0.75rem;
+            }
+
+            .contact-action {
+                padding: 7px 15px;
+                font-size: 0.8rem;
+            }
+
+            .footer-message {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-height: 700px) and (min-width: 769px) {
+            .contact-section {
+                padding: 15px 30px;
+            }
+
+            .neon-title {
+                margin-bottom: 20px;
+            }
+
+            .title-main {
+                font-size: 2rem;
+                margin-bottom: 5px;
+            }
+
+            .title-sub {
+                font-size: 1.1rem;
+            }
+
+            .contact-container {
+                padding: 20px 30px;
+            }
+
+            .contact-items {
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+
+            .contact-item {
+                padding: 14px 18px;
+            }
+
+            .contact-footer {
+                padding-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Subtle Animated Background -->
+    <div class="contact-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <!-- Refined Title -->
+        <div class="neon-title">
+            <h1 class="title-main">LET'S BUILD SOMETHING</h1>
+            <h2 class="title-sub">AMAZING TOGETHER</h2>
+        </div>
+
+        <!-- Contact Container -->
+        <div class="contact-container">
+            <div class="contact-items">
+                <!-- Gmail -->
+                <div class="contact-item gmail">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-name">Gmail</div>
+                        <div class="contact-detail">karthik.alle.cse@gmail.com</div>
+                    </div>
+                    <button class="contact-action" onclick="copyEmail()">
+                        <i class="fas fa-copy"></i>
+                        <span id="copyText">Copy</span>
+                    </button>
+                </div>
+
+                <!-- WhatsApp -->
+                <div class="contact-item whatsapp">
+                    <div class="contact-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-name">WhatsApp</div>
+                        <div class="contact-detail">Let's discuss your project</div>
+                    </div>
+                    <a href="https://wa.me/917382746151?text=Hi%20Karthik!%20I%20came%20across%20your%20portfolio%20and%20I'm%20impressed.%20I'd%20like%20to%20discuss%20an%20opportunity." target="_blank" class="contact-action" onclick="createRipple(event)">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Chat</span>
+                    </a>
+                </div>
+
+                <!-- LinkedIn -->
+                <div class="contact-item linkedin">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-name">LinkedIn</div>
+                        <div class="contact-detail">Connect for networking</div>
+                    </div>
+                    <a href="https://www.linkedin.com/in/karthik-alle/" target="_blank" class="contact-action" onclick="createRipple(event)">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Connect</span>
+                    </a>
+                </div>
+
+                <!-- GitHub -->
+                <div class="contact-item github">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-name">GitHub</div>
+                        <div class="contact-detail">
+                            <a href="https://github.com/Allekarthik" target="_blank">@Allekarthik</a>
+                        </div>
+                    </div>
+                    <a href="https://github.com/Allekarthik" target="_blank" class="contact-action" onclick="createRipple(event)">
+                        <i class="fas fa-star"></i>
+                        <span>Follow</span>
+                    </a>
+                </div>
+
+                <!-- Location -->
+                <div class="contact-item location">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-name">Location</div>
+                        <div class="contact-detail">Kukatpally, Hyderabad, India 🇮🇳</div>
+                    </div>
+                    <button class="contact-action" onclick="createRipple(event)">
+                        <i class="fas fa-globe"></i>
+                        <span>IST</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Message -->
+            <div class="contact-footer">
+                <div class="footer-message">
+                    <i class="fas fa-bolt"></i>
+                    Usually replies within 24 hours
+                    <i class="fas fa-bolt"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Email copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Create subtle floating particles
+        function createParticles() {
+            const bg = document.querySelector('.contact-bg');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 150 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 150 + 'px');
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 8 + 12) + 's';
+                bg.appendChild(particle);
+            }
+        }
+
+        // Copy email to clipboard
+        function copyEmail() {
+            const email = 'karthik.alle.cse@gmail.com';
+            
+            navigator.clipboard.writeText(email).then(() => {
+                showNotification('✓ Email copied to clipboard!');
+                
+                const copyText = document.getElementById('copyText');
+                const originalText = copyText.textContent;
+                copyText.textContent = 'Copied!';
+                
+                setTimeout(() => {
+                    copyText.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showNotification('Failed to copy email', 'error');
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Create ripple effect
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.className = 'ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+            console.log('✨ Contact Section Loaded!');
+        });
+
+        // Auto-resize for iframe embedding
+        function notifyParentResize() {
+            if (window.parent && window.frameElement) {
+                window.frameElement.style.height = document.body.scrollHeight + "px";
+            }
+        }
+
+        window.addEventListener("load", notifyParentResize);
+        const observer = new MutationObserver(notifyParentResize);
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+</body>
+</html>

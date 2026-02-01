@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Section - Karthik Alle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Skills Section */
+        /* .skills-section {
+            min-height: 100vh;
+            padding: 80px 50px;
+            position: relative;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            box-sizing: border-box;
+            overflow: hidden;
+        } */
+/* .skills-section {
+    min-height: 100vh;
+    padding: 60px 20px;
+} */
+ .skills-section {
+    padding: 80px 20px;
+    height: auto;
+}
+
+        /* Animated Background */
+        /* .skills-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        } */
+
+        .skills-bg {
+    position: absolute;
+    inset: 0;
+    min-height: 100%;
+    pointer-events: none;
+}
+.skill-category {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+}
+
+
+        .skill-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(96, 165, 250, 0.4);
+            border-radius: 50%;
+            animation: floatSkill 20s infinite;
+        }
+
+        @keyframes floatSkill {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Glowing Orbs */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.1;
+            animation: floatOrb 25s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #60a5fa;
+            top: 15%;
+            left: 5%;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #f472b6;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(50px, -50px); }
+            66% { transform: translate(-50px, 50px); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 10px 25px;
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 30px;
+            color: #60a5fa;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .section-title i {
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        /* Skill Category Card */
+        .skill-category {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            padding: 35px 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skill-category:nth-child(1) { animation-delay: 0.1s; }
+        .skill-category:nth-child(2) { animation-delay: 0.2s; }
+        .skill-category:nth-child(3) { animation-delay: 0.3s; }
+        .skill-category:nth-child(4) { animation-delay: 0.4s; }
+        .skill-category:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Category-specific colors */
+        .skill-category.frontend::before {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        }
+
+        .skill-category.backend::before {
+            background: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        .skill-category.mobile::before {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+        }
+
+        .skill-category.mlai::before {
+            background: linear-gradient(135deg, #fb923c, #f97316);
+        }
+
+        .skill-category.tools::before {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
+        }
+
+        .skill-category:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-category::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(96, 165, 250, 0.1), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .skill-category:hover::after {
+            opacity: 1;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(96, 165, 250, 0.3);
+        }
+
+        .skill-category.backend:hover {
+            box-shadow: 0 25px 60px rgba(52, 211, 153, 0.3);
+        }
+
+        .skill-category.mobile:hover {
+            box-shadow: 0 25px 60px rgba(167, 139, 250, 0.3);
+        }
+
+        .skill-category.mlai:hover {
+            box-shadow: 0 25px 60px rgba(251, 146, 60, 0.3);
+        }
+
+        .skill-category.tools:hover {
+            box-shadow: 0 25px 60px rgba(244, 114, 182, 0.3);
+        }
+
+        /* Category Header */
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .frontend .category-icon {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .backend .category-icon {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .mobile .category-icon {
+            background: rgba(167, 139, 250, 0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+        }
+
+        .mlai .category-icon {
+            background: rgba(251, 146, 60, 0.15);
+            color: #fb923c;
+            border: 1px solid rgba(251, 146, 60, 0.3);
+        }
+
+        .tools .category-icon {
+            background: rgba(244, 114, 182, 0.15);
+            color: #f472b6;
+            border: 1px solid rgba(244, 114, 182, 0.3);
+        }
+
+        .skill-category:hover .category-icon {
+            transform: rotateY(360deg) scale(1.1);
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e0e7ff;
+        }
+
+        .skill-count {
+            margin-left: auto;
+            background: rgba(148, 163, 184, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        /* Skill Badges */
+        .skill-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(244, 114, 182, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .skill-badge:hover::before {
+            opacity: 1;
+        }
+
+        .skill-badge i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .frontend .skill-badge:hover {
+            border-color: rgba(96, 165, 250, 0.6);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+
+        .backend .skill-badge:hover {
+            border-color: rgba(52, 211, 153, 0.6);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(52, 211, 153, 0.3);
+        }
+
+        .mobile .skill-badge:hover {
+            border-color: rgba(167, 139, 250, 0.6);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(167, 139, 250, 0.3);
+        }
+
+        .mlai .skill-badge:hover {
+            border-color: rgba(251, 146, 60, 0.6);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(251, 146, 60, 0.3);
+        }
+
+        .tools .skill-badge:hover {
+            border-color: rgba(244, 114, 182, 0.6);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(244, 114, 182, 0.3);
+        }
+
+        .skill-badge:hover i {
+            transform: rotate(360deg) scale(1.2);
+        }
+
+        /* Floating Admin Button */
+     .floating-admin-btn {
+    position: absolute;
+    right: 80px;
+    top: 30px;  /* Changed from bottom to top */
+    z-index: 999;
+    animation: floatBtn 3s ease-in-out infinite;
+}
+
+        @keyframes floatBtn {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-10px); }
+        }
+
+        .admin-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(96, 165, 250, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-btn::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #f472b6);
+            opacity: 0.5;
+            filter: blur(15px);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .admin-btn i {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .admin-btn:hover {
+            transform: rotate(90deg) scale(1.15);
+            box-shadow: 0 15px 60px rgba(96, 165, 250, 0.7);
+        }
+
+        .admin-btn:hover i {
+            transform: rotate(-90deg);
+        }
+
+        .admin-tooltip {
+            position: absolute;
+            right: 85px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 15px;
+            color: #e0e7ff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .admin-tooltip::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid rgba(30, 41, 59, 0.95);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .floating-admin-btn:hover .admin-tooltip {
+            opacity: 1;
+            right: 95px;
+        }
+
+        /* Empty State (for ML/AI initially) */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 40px;
+            color: #60a5fa;
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
+            }
+
+            .floating-admin-btn {
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .skills-section {
+                padding: 60px 20px;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .floating-admin-btn {
+                right: 15px;
+                top: auto;
+                bottom: 30px;
+                transform: none;
+                animation: floatBtnMobile 3s ease-in-out infinite;
+            }
+
+            @keyframes floatBtnMobile {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+
+            .admin-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .admin-tooltip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .skill-category {
+                padding: 25px 20px;
+            }
+
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .skill-count {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="skills-section">
+        <!-- Animated Background -->
+        <div class="skills-bg">
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+        </div>
+
+        <div class="container">
+            <!-- Section Header -->
+            <div class="section-header">
+                <!-- <span class="section-tag">💎 My Expertise</span> -->
+                <h2 class="section-title">
+                    <i class="fas fa-code"></i>
+                    Technical Skills
+                </h2>
+                <p class="section-subtitle">Technologies and tools I work with</p>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Frontend Development -->
+                <div class="skill-category frontend">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="category-title">Frontend</h3>
+                        <span class="skill-count" id="frontendCount">0</span>
+                    </div>
+                    <div class="skill-badges" id="frontendSkills">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Development -->
+                <div class="skill-category backend">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3 class="category-title">Backend</h3>
+                        <span class="skill-count" id="backendCount">0</span>
+                    </div>
+                    <div class="skill-badges" id="backendSkills">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile App Development -->
+                <div class="skill-category mobile">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="category-title">Mobile App</h3>
+                        <span class="skill-count" id="mobileCount">0</span>
+                    </div>
+                    <div class="skill-badges" id="mobileSkills">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ML/AI -->
+                <div class="skill-category mlai">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="category-title">ML/AI</h3>
+                        <span class="skill-count" id="mlaiCount">0</span>
+                    </div>
+                    <div class="skill-badges" id="mlaiSkills">
+                        <div class="empty-state">
+                            <i class="fas fa-robot"></i>
+                            <p>Coming soon...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Tools -->
+                <div class="skill-category tools">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="category-title">Tools & Others</h3>
+                        <span class="skill-count" id="toolsCount">0</span>
+                    </div>
+                    <div class="skill-badges" id="toolsSkills">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Admin Button -->
+        <div class="floating-admin-btn">
+            <button class="admin-btn" onclick="openAdminPanel()" title="Admin Panel">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="admin-tooltip">Admin Panel</div>
+        </div>
+    </section>
+
+    <!-- Firebase SDK (Version 9 - Modular) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script  src="firebase-config.js"></script>
+    
+    <!-- Skills Data Management -->
+    <script src="skillss-data-firebase.js"></script>
+
+    
+    
+   <script>
+    // Create animated particles
+    function createSkillParticles() {
+        const bg = document.querySelector('.skills-bg');
+        const particleCount = 40;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'skill-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            bg.appendChild(particle);
+        }
+    }
+
+    // Load and display skills
+    async function loadSkills() {
+        try {
+            const skills = await getSkills();
+            
+            // Ensure skills object has all required properties
+            const safeSkills = {
+                frontend: skills?.frontend || [],
+                backend: skills?.backend || [],
+                mobile: skills?.mobile || [],
+                mlai: skills?.mlai || [],
+                tools: skills?.tools || []
+            };
+            
+            // Display all categories
+            displaySkills('frontendSkills', safeSkills.frontend, 'frontendCount');
+            displaySkills('backendSkills', safeSkills.backend, 'backendCount');
+            displaySkills('mobileSkills', safeSkills.mobile, 'mobileCount');
+            displaySkills('mlaiSkills', safeSkills.mlai, 'mlaiCount');
+            displaySkills('toolsSkills', safeSkills.tools, 'toolsCount');
+            
+        } catch (error) {
+            console.error('Error loading skills:', error);
+            // Show empty states on error
+            displaySkills('frontendSkills', [], 'frontendCount');
+            displaySkills('backendSkills', [], 'backendCount');
+            displaySkills('mobileSkills', [], 'mobileCount');
+            displaySkills('mlaiSkills', [], 'mlaiCount');
+            displaySkills('toolsSkills', [], 'toolsCount');
+        }
+    }
+
+    // Display skills in a category
+    function displaySkills(containerId, skillsArray, countId) {
+        const container = document.getElementById(containerId);
+        const countElement = document.getElementById(countId);
+        
+        // Safety check
+        if (!skillsArray || !Array.isArray(skillsArray)) {
+            skillsArray = [];
+        }
+        
+        // Update count
+        countElement.textContent = skillsArray.length;
+        
+        // Clear container
+        container.innerHTML = '';
+        
+        // If no skills, show empty state
+        if (skillsArray.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No skills yet</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Add skills with staggered animation
+        skillsArray.forEach((skill, index) => {
+            const badge = document.createElement('div');
+            badge.className = 'skill-badge';
+            badge.style.opacity = '0';
+            badge.style.transform = 'translateY(20px)';
+            badge.innerHTML = `
+                <i class="${skill.icon || 'fas fa-circle'}"></i>
+                <span>${skill.name || 'Unknown'}</span>
+            `;
+            container.appendChild(badge);
+            
+            // Staggered reveal animation
+            setTimeout(() => {
+                badge.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                badge.style.opacity = '1';
+                badge.style.transform = 'translateY(0)';
+            }, index * 50);
+        });
+    }
+
+    // Mouse tracking for glow effect
+    document.querySelectorAll('.skill-category').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--mouse-x', x + '%');
+            card.style.setProperty('--mouse-y', y + '%');
+        });
+    });
+
+    // Open admin panel
+    function openAdminPanel() {
+        window.open('admin-login.html', '_blank');
+    }
+
+    // Listen for real-time skill updates from Firebase
+    function setupRealtimeUpdates() {
+        if (typeof listenForSkillUpdates === 'function') {
+            listenForSkillUpdates((updatedSkills) => {
+                // Reload all categories when skills update
+                const safeSkills = {
+                    frontend: updatedSkills?.frontend || [],
+                    backend: updatedSkills?.backend || [],
+                    mobile: updatedSkills?.mobile || [],
+                    mlai: updatedSkills?.mlai || [],
+                    tools: updatedSkills?.tools || []
+                };
+                
+                displaySkills('frontendSkills', safeSkills.frontend, 'frontendCount');
+                displaySkills('backendSkills', safeSkills.backend, 'backendCount');
+                displaySkills('mobileSkills', safeSkills.mobile, 'mobileCount');
+                displaySkills('mlaiSkills', safeSkills.mlai, 'mlaiCount');
+                displaySkills('toolsSkills', safeSkills.tools, 'toolsCount');
+                
+                console.log('✨ Skills updated in real-time!');
+            });
+        }
+    }
+
+    // Initialize
+    async function init() {
+        createSkillParticles();
+        await loadSkills();
+        setupRealtimeUpdates();
+        console.log('🚀 Skills Section Loaded Successfully!');
+    }
+
+    // Wait for Firebase to initialize before loading skills
+    if (typeof firebase !== 'undefined') {
+        init();
+    } else {
+        // Fallback if Firebase fails to load
+        console.warn('⚠️ Firebase not loaded, using localStorage');
+        init();
+    }
+
+
+function notifyParentResize() {
+    if (window.parent && window.frameElement) {
+        window.frameElement.style.height =
+            document.body.scrollHeight + "px";
+    }
+}
+
+// Resize on load
+window.addEventListener("load", notifyParentResize);
+
+// Resize when Firebase updates content
+const observer = new MutationObserver(notifyParentResize);
+observer.observe(document.body, { childList: true, subtree: true });
+</script>
+
+
+
+</body>
+</html>
